@@ -1,4 +1,6 @@
-﻿namespace BankingApi.EventReceiver;
+﻿using Microsoft.Extensions.Options;
+
+namespace BankingApi.EventReceiver;
 
 public class EventMessage
 {
