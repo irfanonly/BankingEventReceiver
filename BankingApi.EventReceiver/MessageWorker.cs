@@ -24,9 +24,9 @@ namespace BankingApi.EventReceiver
         }
 
 
-        public async Task Start()
+        public async Task Start(CancellationToken cancellationToken)
         {
-            while (true)
+            while (!cancellationToken.IsCancellationRequested)
             {
                 await ProcessOneByOne();
             }
@@ -97,7 +97,7 @@ namespace BankingApi.EventReceiver
         }
 
         private void ValidateTransaction(Transaction? transaction) {
-            if (transaction == null || !decimal.TryParse(transaction.Amount, out _) || (transaction.MessageType != "Credit" && transaction.MessageType != "Debit"))
+            if (transaction == null || !decimal.TryParse(transaction.Amount, out _) || (transaction.MessageType != MessageType.Credit && transaction.MessageType != MessageType.Debit))
             {
                 _logger.LogError($"Invalid transaction: {transaction?.Id}");
                 throw new NonTransientException("Invalid transaction");
